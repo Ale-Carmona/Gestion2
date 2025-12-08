@@ -1,0 +1,28 @@
+﻿@model Gestion2.Models.MemoModel
+
+<div class="container mt-4">
+    <h2 class="text-center">MEMORÁNDUM</h2>
+    <hr />
+
+    <p><strong>Folio:</strong> @Model.Folio / @Model.Año</p>
+    <p><strong>Fecha:</strong> @Model.FechaRegistro.ToString("dd/MM/yyyy")</p>
+    <p><strong>De:</strong> @Model.De</p>
+    <p><strong>Para:</strong> @Model.Para</p>
+    <p><strong>Asunto:</strong></p>
+    <p>@Model.Asunto</p>
+    <p><strong>Estatus:</strong> @Model.Estatus</p>
+
+    @* Mostrar motivo de cancelación si está cancelado *@
+    @if (Model.Estatus == "Cancelado")
+    {
+        <hr />
+        <div class="alert alert-danger">
+            <strong>Cancelado por:</strong> @ViewBag.UsuarioCancelo <br />
+            <strong>Motivo:</strong> @ViewBag.MotivoCancelacion <br />
+            <strong>Fecha de cancelación:</strong> @((DateTime)ViewBag.FechaCancelacion)
+        </div>
+    }
+
+    <hr />
+    <a asp-action="Index" class="btn btn-primary">Regresar</a>
+</div>

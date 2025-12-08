@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Gestion2.Models.MemoModel>
+
+<div class="container mt-4">
+    <h2 class="mb-3">Registros de Memorándum</h2>
+
+    <table class="table table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Folio</th>
+                <th>Año</th>
+                <th>De</th>
+                <th>Para</th>
+                <th>Fecha</th>
+                <th>Asunto</th>
+                <th>Estatus</th>
+                <th>Creado por</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Folio</td>
+                    <td>@item.Año</td>
+                    <td>@item.De</td>
+                    <td>@item.Para</td>
+                    <td>@item.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Asunto</td>
+                    <td>@item.Estatus</td>
+                    <td>@item.UsuarioRegistro</td>
+                    <td>
+                        <a asp-controller="Registro" asp-action="Preview" asp-route-id="@item.Id" class="btn btn-sm btn-info">Ver</a>
+                        <a asp-controller="Registro" asp-action="Cancel" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Cancelar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

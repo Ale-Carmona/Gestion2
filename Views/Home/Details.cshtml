@@ -1,0 +1,37 @@
+﻿@model Gestion2.Models.MemoModel
+
+@{
+    ViewData["Title"] = "Detalle del Memorándum";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">MEMORÁNDUM</h2>
+    <hr />
+
+    <p><strong>Folio:</strong> @Model.Folio / @Model.Año</p>
+    <p><strong>Fecha:</strong> @Model.FechaRegistro.ToString("dd/MM/yyyy")</p>
+    <p><strong>De:</strong> @Model.De</p>
+    <p><strong>Para:</strong> @Model.Para</p>
+    <p><strong>Asunto:</strong></p>
+    <p>@Model.Asunto</p>
+    <p><strong>Estatus:</strong> @Model.Estatus</p>
+
+    @if (Model.Cancelaciones != null && Model.Cancelaciones.Any())
+    {
+        <hr />
+        <h4 class="text-danger">Cancelaciones</h4>
+        <ul>
+            @foreach (var c in Model.Cancelaciones)
+            {
+                <li>
+                    <strong>Usuario:</strong> @c.UsuarioCancelo |
+                    <strong>Motivo:</strong> @c.MotivoCancelacion |
+                    <strong>Fecha:</strong> @c.FechaCancelacion.ToString("dd/MM/yyyy HH:mm")
+                </li>
+            }
+        </ul>
+    }
+
+    <hr />
+    <a asp-action="Index" class="btn btn-primary">Regresar</a>
+</div>

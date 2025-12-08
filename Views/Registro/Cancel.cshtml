@@ -1,0 +1,28 @@
+﻿@model Gestion2.Models.MemoModel
+
+<div class="container mt-4">
+    <h2 class="text-danger">Cancelar Memorándum</h2>
+    <hr />
+
+    <form asp-action="Cancel" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label class="form-label"><strong>Folio:</strong></label>
+            <div>@Model.Folio / @Model.Año</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><strong>Registrado por:</strong></label>
+            <div>@Model.UsuarioRegistro</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><strong>Motivo de cancelación</strong></label>
+            <textarea class="form-control" name="motivo" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-danger">Confirmar Cancelación</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Regresar</a>
+    </form>
+</div>
