@@ -8,8 +8,13 @@
 	<p><strong>Fecha:</strong> @Model.FechaRegistro.ToString("dd/MM/yyyy")</p>
 	<p><strong>De:</strong> @Model.De</p>
 	<p><strong>Para:</strong> @Model.Para</p>
+
 	<p><strong>Asunto:</strong></p>
 	<p>@Model.Asunto</p>
+
+    <p><strong>Contenido:</strong></p>
+    <p>@Model.Contenido</p>
+
 	<p><strong>Estatus:</strong> @Model.Estatus</p>
 
 	@* Mostrar motivo de cancelación si está cancelado *@
@@ -30,3 +35,5 @@
 	<hr />
 	<a asp-action="Index" class="btn btn-primary">Regresar</a>
 </div>
+
+

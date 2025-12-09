@@ -16,11 +16,22 @@ namespace GestionAvanzadas.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string buscar)
         {
-            var lista = _context.Memos.ToList();
+            var query = _context.Memos.AsQueryable();
+
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                query = query.Where(m => m.Asunto.Contains(buscar));
+            }
+
+            var lista = query.OrderBy(m => m.Folio).ToList();
+
+            ViewBag.Buscar = buscar;
+
             return View(lista);
         }
+
 
         public IActionResult Preview(int id)
         {
@@ -91,7 +102,6 @@ namespace GestionAvanzadas.Controllers
 
             return RedirectToAction("Index");
         }
-
         public IActionResult ExportToExcel()
         {
             var memos = _context.Memos
@@ -109,11 +119,12 @@ namespace GestionAvanzadas.Controllers
                 ws.Cell(1, 4).Value = "Para";
                 ws.Cell(1, 5).Value = "Fecha Registro";
                 ws.Cell(1, 6).Value = "Asunto";
-                ws.Cell(1, 7).Value = "Estatus";
-                ws.Cell(1, 8).Value = "Usuario Registro";
-                ws.Cell(1, 9).Value = "Usuario Canceló";
-                ws.Cell(1, 10).Value = "Motivo Cancelación";
-                ws.Cell(1, 11).Value = "Fecha Cancelación";
+                ws.Cell(1, 7).Value = "Contenido";
+                ws.Cell(1, 8).Value = "Estatus";
+                ws.Cell(1, 9).Value = "Usuario Registro";
+                ws.Cell(1, 10).Value = "Usuario Canceló";
+                ws.Cell(1, 11).Value = "Motivo Cancelación";
+                ws.Cell(1, 12).Value = "Fecha Cancelación";
 
                 int row = 2;
 
@@ -125,32 +136,42 @@ namespace GestionAvanzadas.Controllers
                     ws.Cell(row, 4).Value = memo.Para;
                     ws.Cell(row, 5).Value = memo.FechaRegistro.ToString("dd/MM/yyyy");
                     ws.Cell(row, 6).Value = memo.Asunto;
-                    ws.Cell(row, 7).Value = memo.Estatus;
-                    ws.Cell(row, 8).Value = memo.UsuarioRegistro;
+                    ws.Cell(row, 7).Value = memo.Contenido;
+                    ws.Cell(row, 8).Value = memo.Estatus;
+                    ws.Cell(row, 9).Value = memo.UsuarioRegistro; // Siempre usuario registro
 
+                    // CANCELACIÓN SOLO SI EXISTE
                     if (memo.Estatus == "Cancelado" && memo.Cancelaciones != null && memo.Cancelaciones.Any())
                     {
-                        var cancelacion = memo.Cancelaciones
+                        var cancel = memo.Cancelaciones
                             .OrderByDescending(c => c.FechaCancelacion)
                             .First();
-                        ws.Cell(row, 9).Value = cancelacion.UsuarioCancelo;
-                        ws.Cell(row, 10).Value = cancelacion.MotivoCancelacion;
-                        ws.Cell(row, 11).Value = cancelacion.FechaCancelacion.ToString("dd/MM/yyyy HH:mm");
+
+                        ws.Cell(row, 10).Value = cancel.UsuarioCancelo ?? "";
+                        ws.Cell(row, 11).Value = cancel.MotivoCancelacion ?? "";
+                        ws.Cell(row, 12).Value = cancel.FechaCancelacion.ToString("dd/MM/yyyy HH:mm") ?? "";
+                    }
+                    else
+                    {
+                        // Si no está cancelado, deja columnas vacías
+                        ws.Cell(row, 10).Value = "";
+                        ws.Cell(row, 11).Value = "";
+                        ws.Cell(row, 12).Value = "";
                     }
 
                     row++;
                 }
 
-                ws.Columns().AdjustToContents(); // Autoajusta ancho de columnas
+                ws.Columns().AdjustToContents();
 
                 using (var stream = new MemoryStream())
                 {
                     workbook.SaveAs(stream);
                     var fileName = $"Memos_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+
                     return File(stream.ToArray(),
-                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                fileName);
-                
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        fileName);
                 }
             }
         }

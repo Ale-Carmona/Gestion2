@@ -2,6 +2,19 @@
 
 <div class="container mt-4">
     <h2 class="mb-3">Registros de Memorándum</h2>
+
+    <!-- 🔍 BUSCADOR POR ASUNTO -->
+    <form method="get" asp-action="Index" class="mb-3 d-flex">
+        <input type="text" name="buscar" value="@ViewBag.Buscar"
+               class="form-control me-2"
+               placeholder="Buscar por asunto...">
+
+        <button type="submit" class="btn btn-primary">Buscar</button>
+
+        <a asp-action="Index" class="btn btn-secondary ms-2">Limpiar</a>
+    </form>
+
+    <!-- 📤 EXPORTAR A EXCEL -->
     <a asp-action="ExportToExcel" class="btn btn-success mb-3">Exportar a Excel</a>
 
     <table class="table table-striped mt-3">
@@ -31,9 +44,16 @@
                     <td>@item.Asunto</td>
                     <td>@item.Estatus</td>
                     <td>@item.UsuarioRegistro</td>
+
                     <td>
-                        <a asp-controller="Registro" asp-action="Preview" asp-route-id="@item.Id" class="btn btn-sm btn-info">Ver</a>
-                        <a asp-controller="Registro" asp-action="Cancel" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Cancelar</a>
+                        <a asp-controller="Registro" asp-action="Preview" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-info">Ver</a>
+
+                        @if (item.Estatus == "Activo")
+                        {
+                            <a asp-controller="Registro" asp-action="Cancel" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-danger">Cancelar</a>
+                        }
                     </td>
                 </tr>
             }

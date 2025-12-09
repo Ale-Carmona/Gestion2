@@ -1,0 +1,46 @@
+﻿@model List<Gestion2.Models.CancelacionModel>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4 text-danger">MEMORÁNDUM CANCELADOS</h2>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Folio</th>
+                <th>Año</th>
+                <th>De</th>
+                <th>Para</th>
+                <th>Motivo</th>
+                <th>Usuario Canceló</th>
+                <th>Fecha Cancelación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.Memo.Folio</td>
+                    <td>@c.Memo.Año</td>
+                    <td>@c.Memo.De</td>
+                    <td>@c.Memo.Para</td>
+                    <td>@c.MotivoCancelacion</td>
+                    <td>@c.UsuarioCancelo</td>
+                    <td>@c.FechaCancelacion.ToString("dd/MM/yyyy HH:mm")</td>
+
+                    <td>
+                        <a class="btn btn-primary btn-sm"
+                           asp-controller="Registro"
+                           asp-action="Preview"
+                           asp-route-id="@c.Memo.Id">
+                            Ver Memo
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary mt-3">Regresar</a>
+</div>

@@ -31,6 +31,26 @@ namespace Gestion2.Controllers
             return View();
         }
 
+        public IActionResult Consultas()
+        {
+            var activos = _context.Memos
+                .Where(m => m.Estatus == "Activo")
+                .OrderBy(m => m.Folio)
+                .ToList();
+
+            return View(activos);
+        }
+        public IActionResult Cancelar()
+        {
+            var cancelados = _context.Cancelaciones
+                .Include(c => c.Memo)   // Para acceder a datos del memo
+                .OrderByDescending(c => c.FechaCancelacion)
+                .ToList();
+
+            return View(cancelados);
+        }
+
+
 
         // Acción para mostrar el formulario de creación
         public IActionResult Create()
