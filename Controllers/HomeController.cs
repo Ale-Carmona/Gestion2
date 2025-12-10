@@ -18,6 +18,27 @@ namespace Gestion2.Controllers
             _context = context;
         }
 
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(LoginModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            // Validación simulada
+            if (model.User == "admin" && model.Password == "1234")
+                return RedirectToAction("Index");
+
+            ModelState.AddModelError("", "Usuario o contraseña incorrectos");
+            return View(model);
+        }
+
+
         #region--index
         public IActionResult Index()
         {
