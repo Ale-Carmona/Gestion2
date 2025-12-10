@@ -1,0 +1,23 @@
+﻿@* @{
+    ViewData["Title"] = "Panel de Control";
+}
+
+<div class="container mt-4">
+    <h2>Bienvenido @Context.Session.GetString("Usuario")</h2>
+    <p>Rol: @Context.Session.GetString("Role")</p>
+
+    <div class="d-grid gap-2 mt-3">
+        <a class="btn btn-primary" asp-controller="Home" asp-action="Create">Crear Registro</a>
+        <a class="btn btn-secondary" asp-controller="Home" asp-action="Consultas">Consultas</a>
+
+        @if (Context.Session.GetString("Role") == "Admin")
+        {
+            <a class="btn btn-warning" asp-controller="Home" asp-action="Cancelar">Cancelaciones</a>
+        }
+    </div>
+
+    <form asp-action="Logout" method="post" class="mt-3">
+        <button class="btn btn-danger">Cerrar Sesión</button>
+    </form>
+</div>
+ *@

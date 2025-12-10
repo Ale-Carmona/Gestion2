@@ -1,5 +1,5 @@
-﻿@{
-    ViewData["Title"] = "Panel de Control";
+﻿﻿@{
+ViewData["Title"] = "Panel de Control";
 }
 
 <div class="container mt-4">
@@ -16,7 +16,9 @@
 
     <hr />
 
-    <a asp-action="Logout" class="btn btn-danger mt-3">Cerrar sesión</a>
+    
+    <form asp-action="Logout" method="post" class="mt-3">
+        <button class="btn btn-danger">Cerrar Sesión</button>
+    </form>
 
 </div>
-

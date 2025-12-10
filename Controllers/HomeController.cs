@@ -9,9 +9,7 @@ namespace Gestion2.Controllers
 {
     public class HomeController : Controller
     {
-
         private readonly ApplicationDbContext _context;
-
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
@@ -20,17 +18,21 @@ namespace Gestion2.Controllers
             _context = context;
         }
 
+        #region--index
         public IActionResult Index()
         {
             return View();
-
         }
+        #endregion
 
+        #region--privacy
         public IActionResult Privacy()
         {
             return View();
         }
+        #endregion
 
+        #region-- Consultas
         public IActionResult Consultas()
         {
             var activos = _context.Memos
@@ -40,6 +42,9 @@ namespace Gestion2.Controllers
 
             return View(activos);
         }
+        #endregion
+
+        #region--Cancelados
         public IActionResult Cancelar()
         {
             var cancelados = _context.Cancelaciones
@@ -49,16 +54,17 @@ namespace Gestion2.Controllers
 
             return View(cancelados);
         }
+        #endregion
 
-
-
+        #region-- create
         // Acción para mostrar el formulario de creación
         public IActionResult Create()
         {
             return View();
         }
+        #endregion
 
-        // Acción para recibir los datos del formulario de creación (POST)
+        #region-- - Create Post
         [HttpPost]
         public IActionResult Create(MemoModel memo)
         {
@@ -79,7 +85,9 @@ namespace Gestion2.Controllers
 
             return RedirectToAction("Details", new { id = memo.Id });
         }
+        #endregion
 
+        #region--details
         public IActionResult Details(int id)
         {
             var memo = _context.Memos
@@ -91,9 +99,9 @@ namespace Gestion2.Controllers
 
             return View(memo);
         }
+        #endregion
 
-
-        // Acción para mostrar cancelaciones (puedes adaptar según tu lógica)
+        #region---- Cancelaciones
         public IActionResult Cancelaciones()
         {
             var cancelados = _context.Cancelaciones
@@ -102,6 +110,7 @@ namespace Gestion2.Controllers
 
             return View(cancelados);
         }
+        #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -10,29 +10,26 @@ namespace GestionAvanzadas.Controllers
     public class RegistroController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         public RegistroController(ApplicationDbContext context)
         {
             _context = context;
         }
 
+        #region--index
         public IActionResult Index(string buscar)
         {
             var query = _context.Memos.AsQueryable();
-
             if (!string.IsNullOrEmpty(buscar))
             {
                 query = query.Where(m => m.Asunto.Contains(buscar));
             }
-
             var lista = query.OrderBy(m => m.Folio).ToList();
-
             ViewBag.Buscar = buscar;
-
             return View(lista);
         }
+        #endregion
 
-
+        #region--preview
         public IActionResult Preview(int id)
         {
             // Traer memo con sus cancelaciones
@@ -54,17 +51,20 @@ namespace GestionAvanzadas.Controllers
                 ViewBag.UsuarioCancelo = cancelacion.UsuarioCancelo;
                 ViewBag.FechaCancelacion = cancelacion.FechaCancelacion;
             }
-
             return View(memo);
         }
+        #endregion
 
+        #region--Cancel
         public IActionResult Cancel(int id)
         {
             var memo = _context.Memos.Find(id);
             if (memo == null) return NotFound();
             return View(memo);
         }
+        #endregion
 
+        #region-- Cancel Post
         [HttpPost]
         public IActionResult Cancel(int id, string motivo)
         {
@@ -88,8 +88,9 @@ namespace GestionAvanzadas.Controllers
 
             return RedirectToAction("Index");
         }
+        #endregion
 
-
+        #region-- Delete
         public IActionResult Delete(int id)
         {
             var memo = _context.Memos.Find(id);
@@ -102,6 +103,9 @@ namespace GestionAvanzadas.Controllers
 
             return RedirectToAction("Index");
         }
+        #endregion
+
+        #region-- Export to Excel
         public IActionResult ExportToExcel()
         {
             var memos = _context.Memos
@@ -175,5 +179,6 @@ namespace GestionAvanzadas.Controllers
                 }
             }
         }
+        #endregion
     }
 }
